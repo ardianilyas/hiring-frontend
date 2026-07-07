@@ -24,7 +24,7 @@ function App() {
       <p className="text-slate-600 mb-8">You are logged in as {user?.email}</p>
       
       <AlertDialog>
-        <AlertDialogTrigger 
+        <AlertDialogTrigger
           render={
             <Button variant="destructive" disabled={logoutMutation.isPending}>
               {logoutMutation.isPending ? "Logging out..." : "Logout"}

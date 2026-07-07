@@ -14,7 +14,7 @@ export function useLogin() {
     onSuccess: (data) => {
       setUser(data.user);
       toast.success('Successfully logged in!');
-      navigate('/');
+      navigate('/dashboard');
     },
     onError: (error: any) => {
       const message = error.response?.data?.message || 'Failed to login. Please try again.';
@@ -32,7 +32,7 @@ export function useRegister() {
     onSuccess: (data) => {
       setUser(data.user);
       toast.success('Account created successfully!');
-      navigate('/');
+      navigate('/dashboard');
     },
     onError: (error: any) => {
       const message = error.response?.data?.message || 'Failed to register. Please try again.';
@@ -55,5 +55,22 @@ export function useLogout() {
     onError: () => {
       toast.error('Failed to logout. Please try again.');
     }
+  });
+}
+
+import { useQuery } from '@tanstack/react-query';
+import { getSession } from '../api/authApi';
+
+export function useSessionCheck() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  
+  return useQuery({
+    queryKey: ['session'],
+    queryFn: () => getSession(),
+    // Only run this query if the user is considered authenticated by zustand
+    enabled: isAuthenticated,
+    retry: false,
+    // Refetch when the user refocuses the window to ensure session is always fresh
+    refetchOnWindowFocus: true,
   });
 }

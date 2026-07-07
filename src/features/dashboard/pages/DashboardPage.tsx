@@ -1,5 +1,5 @@
-import { useAuthStore } from './shared/store/authStore';
-import { useLogout } from './features/auth/hooks/useAuth';
+import { useAuthStore } from '../../../shared/store/authStore';
+import { useLogout } from '../../auth/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -12,14 +12,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import './App.css';
 
-function App() {
+export function DashboardPage() {
   const user = useAuthStore((state) => state.user);
   const logoutMutation = useLogout();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-slate-50 dark:bg-slate-950">
       <h1 className="text-3xl font-bold mb-4">Welcome back, {user?.name || 'User'}!</h1>
       <p className="text-slate-600 mb-8">You are logged in as {user?.email}</p>
       
@@ -40,8 +39,11 @@ function App() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => logoutMutation.mutate()}>
-              Continue
+            <AlertDialogAction 
+              onClick={() => logoutMutation.mutate()}
+              variant="destructive"
+            >
+              Logout
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -49,5 +51,3 @@ function App() {
     </div>
   )
 }
-
-export default App;

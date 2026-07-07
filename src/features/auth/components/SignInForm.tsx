@@ -25,17 +25,17 @@ export function SignInForm() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-3xl font-semibold mb-2 text-slate-900">Welcome Back</h2>
-        <p className="text-sm text-slate-500">Enter your credentials to access your account</p>
+        <h2 className="text-3xl font-semibold mb-2 text-slate-900 dark:text-white">Welcome Back</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Enter your credentials to access your account</p>
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-slate-700">Email address</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">Email address</Label>
           <Input 
             id="email" 
             placeholder="username@company.com" 
-            className="h-12 rounded-xl border-slate-200"
+            className="h-12 rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
             {...form.register("email")}
           />
           {form.formState.errors.email && (
@@ -45,8 +45,8 @@ export function SignInForm() {
         
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-sm font-medium text-slate-700">Password</Label>
-            <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-700">
+            <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</Label>
+            <a href="#" className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">
               Forgot password?
             </a>
           </div>
@@ -55,13 +55,13 @@ export function SignInForm() {
               id="password" 
               type={showPassword ? "text" : "password"}
               placeholder="••••••••" 
-              className="h-12 rounded-xl border-slate-200 pr-10"
+              className="h-12 rounded-xl border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white pr-10"
               {...form.register("password")}
             />
             <button 
               type="button" 
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
             >
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
@@ -81,8 +81,8 @@ export function SignInForm() {
       </form>
 
       <div className="mt-8 text-sm">
-        <span className="text-slate-600">Don't have an account? </span>
-        <Link to="/sign-up" className="font-medium text-blue-600 hover:text-blue-700">
+        <span className="text-slate-600 dark:text-slate-400">Don't have an account? </span>
+        <Link to="/sign-up" className="font-medium text-blue-600 dark:text-blue-500 hover:text-blue-700 dark:hover:text-blue-400">
           Sign up
         </Link>
       </div>

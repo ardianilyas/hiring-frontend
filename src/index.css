@@ -141,6 +141,14 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* PRD Specific Colors */
+  --color-brand-primary: #5B3DF5;
+  --color-brand-secondary: #111827;
+  --color-brand-gray: #6B7280;
+  --color-brand-border: #E5E7EB;
+  --color-brand-light: #F9FAFB;
+  --color-brand-success: #10B981;
 }
 
 /*---break---*/

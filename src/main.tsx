@@ -7,7 +7,7 @@ import { Toaster } from 'sonner'
 import { queryClient } from './shared/api/queryClient'
 import './index.css'
 import { SignInPage, SignUpPage, AuthProvider } from './features/auth'
-import { LandingPage } from './features/landing'
+import { LandingPage, JobDetailPage } from './features/landing'
 import { DashboardPage } from './features/dashboard'
 import { ProtectedRoute } from './shared/components/ProtectedRoute'
 import { PublicRoute } from './shared/components/PublicRoute'
@@ -20,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/job/:id" element={<JobDetailPage />} />
               <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
               <Route path="/sign-in" element={<PublicRoute><SignInPage /></PublicRoute>} />
               <Route path="/sign-up" element={<PublicRoute><SignUpPage /></PublicRoute>} />

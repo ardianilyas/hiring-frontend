@@ -78,11 +78,15 @@ export function Navbar() {
                     </DropdownMenuLabel>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/dashboard')} className="cursor-pointer text-brand-secondary">
-                    <LayoutDashboard className="mr-2 h-4 w-4 text-brand-gray" />
-                    <span>Dashboard</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
+                  {user?.role === 'admin' && (
+                    <>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard')} className="cursor-pointer text-brand-secondary">
+                        <LayoutDashboard className="mr-2 h-4 w-4 text-brand-gray" />
+                        <span>Dashboard</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem 
                     onClick={() => setShowLogoutAlert(true)} 
                     className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"

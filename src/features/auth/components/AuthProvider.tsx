@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useSessionCheck } from '../hooks/useAuth';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

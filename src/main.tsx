@@ -13,6 +13,7 @@ import { DashboardPage } from './features/dashboard'
 import { DepartmentsPage } from './features/departments'
 import { ProtectedRoute } from './shared/components/ProtectedRoute'
 import { PublicRoute } from './shared/components/PublicRoute'
+import { NotFoundPage } from './shared/pages/NotFoundPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/dashboard/departments" element={<ProtectedRoute requireAdmin={true}><DepartmentsPage /></ProtectedRoute>} />
               <Route path="/sign-in" element={<PublicRoute><SignInPage /></PublicRoute>} />
               <Route path="/sign-up" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </BrowserRouter>
         </AuthProvider>

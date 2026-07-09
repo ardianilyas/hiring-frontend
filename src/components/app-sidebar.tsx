@@ -15,6 +15,7 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import { LayoutDashboard, Users, Briefcase, FileText, Building2 } from "lucide-react"
+import { useLocation } from "react-router"
 
 // Admin navigation data based on API_DOCS.md
 const data = {
@@ -49,6 +50,13 @@ export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sideb
     email: "admin@example.com",
     avatar: "",
   }
+  
+  const location = useLocation()
+  
+  const navMainWithActive = data.navMain.map(item => ({
+    ...item,
+    isActive: location.pathname === item.url || (item.url !== '/dashboard' && location.pathname.startsWith(item.url))
+  }))
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -70,7 +78,7 @@ export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sideb
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navMainWithActive} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={defaultUser} />

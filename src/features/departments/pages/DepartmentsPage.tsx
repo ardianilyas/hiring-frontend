@@ -16,6 +16,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router";
 import { useAuthStore } from "@/shared/store/authStore";
 
 export function DepartmentsPage() {
@@ -33,7 +34,7 @@ export function DepartmentsPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/dashboard">Admin</BreadcrumbLink>
+                  <BreadcrumbLink render={<Link to="/dashboard" />}>Admin</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

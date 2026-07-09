@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import type { ColumnDef, SortingState, ColumnFiltersState } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { ArrowUpDown, Copy, MoreHorizontal, Pencil, Trash } from "lucide-react"
 import { toast } from "sonner"
 import { EditDepartmentDialog } from "./EditDepartmentDialog"
 
@@ -71,7 +71,12 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
       cell: ({ row }) => {
         const dateStr = row.getValue("createdAt") as string
         if (!dateStr) return "-"
-        return new Date(dateStr).toLocaleDateString()
+        return new Intl.DateTimeFormat("en-GB", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }).format(new Date(dateStr))
       },
     },
     {
@@ -97,6 +102,7 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
                     }
                   }}
                 >
+                  <Copy className="w-4 h-4 mr-2" />
                   Copy ID
                 </DropdownMenuItem>
               </DropdownMenuGroup>

@@ -13,6 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { Link } from "react-router"
 
 import { useAuthStore } from '../../../shared/store/authStore';
 
@@ -30,7 +31,7 @@ export function DashboardPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
+                  <BreadcrumbLink render={<Link to="/dashboard" />}>
                     Admin
                   </BreadcrumbLink>
                 </BreadcrumbItem>

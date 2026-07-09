@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import type { ColumnDef, SortingState, ColumnFiltersState } from "@tanstack/react-table"
-import { ArrowUpDown, Copy, MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { ArrowUpDown, Copy, MoreHorizontal, Pencil, Search, Trash } from "lucide-react"
 import { toast } from "sonner"
 import { EditDepartmentDialog } from "./EditDepartmentDialog"
 
@@ -23,6 +23,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useDeleteDepartment } from "../hooks/useDeleteDepartment"
 import {
   Table,
   TableBody,
@@ -43,6 +54,11 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [editDepartment, setEditDepartment] = React.useState<Department | null>(null)
+  const [departmentToDelete, setDepartmentToDelete] = React.useState<Department | null>(null)
+
+  const { mutate: deleteDepartment, isPending: isDeleting } = useDeleteDepartment(() => {
+    setDepartmentToDelete(null)
+  })
 
   const columns = React.useMemo<ColumnDef<Department>[]>(() => [
     {
@@ -109,7 +125,7 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => setEditDepartment(department)}><Pencil className="w-4 h-4 mr-2" /> Edit</DropdownMenuItem>
-                <DropdownMenuItem variant="destructive"><Trash className="w-4 h-4 mr-2" /> Delete</DropdownMenuItem>
+                <DropdownMenuItem variant="destructive" onClick={() => setDepartmentToDelete(department)}><Trash className="w-4 h-4 mr-2" /> Delete</DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -169,18 +185,19 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
+      <div className="flex items-center relative w-full sm:max-w-sm">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Filter departments by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm bg-white"
+          className="w-full bg-white pl-9"
         />
       </div>
-      <div className="rounded-md border bg-white shadow-sm overflow-hidden">
-        <Table>
+      <div className="rounded-md border bg-white shadow-sm overflow-x-auto">
+        <Table className="min-w-[600px]">
           <TableHeader className="bg-slate-50 border-b">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -247,6 +264,33 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
         department={editDepartment} 
         onClose={() => setEditDepartment(null)} 
       />
+
+      <AlertDialog open={!!departmentToDelete} onOpenChange={(open) => !open && !isDeleting && setDepartmentToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the <strong>{departmentToDelete?.name}</strong> department
+              and remove all of its associated data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={(e) => {
+                e.preventDefault()
+                if (departmentToDelete) {
+                  deleteDepartment(departmentToDelete.id)
+                }
+              }}
+              disabled={isDeleting}
+              variant="destructive"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

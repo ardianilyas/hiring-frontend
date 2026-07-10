@@ -62,6 +62,14 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
 
   const columns = React.useMemo<ColumnDef<Department>[]>(() => [
     {
+      id: "index",
+      header: "No.",
+      cell: ({ row, table }) => {
+        const index = table.getSortedRowModel().rows.findIndex(r => r.id === row.id) + 1;
+        return <div className="text-muted-foreground w-8 text-center">{index}</div>;
+      },
+    },
+    {
       accessorKey: "name",
       header: ({ column }) => {
         return (

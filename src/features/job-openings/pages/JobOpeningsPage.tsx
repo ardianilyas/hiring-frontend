@@ -1,6 +1,5 @@
-import { useDepartments } from "../hooks/useDepartments";
-import { DepartmentsTable } from "../components/DepartmentsTable";
-import { CreateDepartmentDialog } from "../components/CreateDepartmentDialog";
+import { JobOpeningsTable } from "../components/JobOpeningsTable";
+import { CreateJobOpeningDialog } from "../components/CreateJobOpeningDialog";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -19,8 +18,7 @@ import {
 import { Link } from "react-router";
 import { useAuthStore } from "@/shared/store/authStore";
 
-export function DepartmentsPage() {
-  const { data, isLoading } = useDepartments();
+export function JobOpeningsPage() {
   const user = useAuthStore((state) => state.user);
 
   return (
@@ -38,7 +36,7 @@ export function DepartmentsPage() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Departments</BreadcrumbPage>
+                  <BreadcrumbPage>Job Openings</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -48,13 +46,13 @@ export function DepartmentsPage() {
         <div className="flex flex-1 flex-col gap-4 md:gap-8 p-4 md:p-8 bg-slate-50 dark:bg-slate-950 animate-in fade-in duration-500 min-w-0 w-full">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-secondary">Departments</h1>
-              <p className="text-brand-gray mt-1 text-sm md:text-base">Manage company departments and teams.</p>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-secondary">Job Openings</h1>
+              <p className="text-brand-gray mt-1 text-sm md:text-base">Manage open roles and publish job listings.</p>
             </div>
-            <CreateDepartmentDialog />
+            <CreateJobOpeningDialog />
           </div>
 
-          <DepartmentsTable data={data?.data} isLoading={isLoading} />
+          <JobOpeningsTable />
         </div>
       </SidebarInset>
     </SidebarProvider>

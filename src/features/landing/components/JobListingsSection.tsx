@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MapPin, Clock, Briefcase } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { formatEnumString } from '@/lib/utils';
 import { useNavigate } from 'react-router';
 import { useJobOpenings } from '../hooks/useJobOpenings';
 import {
@@ -79,29 +81,36 @@ export function JobListingsSection() {
             {jobs.map((job: any, index: number) => (
               <div 
                 key={job.id} 
-                className="group bg-white p-6 rounded-2xl border border-brand-border shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full animate-in slide-in-from-bottom-8 fade-in fill-mode-both view-in"
+                className="group relative bg-white/50 backdrop-blur-xl p-7 rounded-[2rem] border border-brand-border/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 flex flex-col h-full animate-in slide-in-from-bottom-8 fade-in fill-mode-both view-in overflow-hidden"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="mb-4">
-                  {job.department?.name && (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-primary/10 text-brand-primary mb-4">
-                      {job.department.name}
+                {/* Subtle gradient blob on hover */}
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand-primary/5 rounded-full blur-3xl group-hover:bg-brand-primary/10 transition-colors duration-500 pointer-events-none" />
+
+                <div className="relative z-10 mb-6">
+                  <div className="flex items-start justify-between mb-4 gap-2">
+                    {job.department?.name && (
+                      <Badge variant="secondary" className="bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 border-0 rounded-full px-3">
+                        {job.department.name}
+                      </Badge>
+                    )}
+                    <span className="text-xs font-semibold text-slate-500 px-3 py-1.5 bg-slate-100 rounded-full shrink-0">
+                      {job.salary || 'Competitive'}
                     </span>
-                  )}
-                  <h3 className="text-xl font-bold text-brand-secondary mb-2">{job.title}</h3>
-                  <p className="text-brand-gray text-sm line-clamp-2">{job.description}</p>
+                  </div>
+                  <h3 className="text-2xl font-bold text-brand-secondary mb-3 group-hover:text-brand-primary transition-colors line-clamp-2">{job.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{job.description}</p>
                 </div>
                 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-brand-gray mb-6 flex-grow">
-                  <div className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {job.location || 'N/A'}</div>
-                  <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {job.employmentType || 'Full Time'}</div>
+                <div className="relative z-10 flex flex-wrap items-center gap-3 text-sm text-slate-600 mb-8 flex-grow">
+                  <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100/50"><MapPin className="w-4 h-4 text-brand-primary/70" /> {job.location || 'N/A'}</div>
+                  <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100/50"><Clock className="w-4 h-4 text-brand-primary/70" /> {formatEnumString(job.employmentType) || 'Full Time'}</div>
                   {job.experience && (
-                    <div className="flex items-center gap-1.5"><Briefcase className="w-4 h-4" /> {job.experience}</div>
+                    <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100/50"><Briefcase className="w-4 h-4 text-brand-primary/70" /> {job.experience}</div>
                   )}
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-brand-border mt-auto">
-                  <span className="text-sm font-medium text-brand-secondary">{job.salary || 'Competitive'}</span>
+                <div className="relative z-10 pt-5 border-t border-slate-100 mt-auto flex justify-end">
                   <Button onClick={() => navigate(`/job/${job.id}`)}>
                     View Details
                   </Button>

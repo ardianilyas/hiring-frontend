@@ -1,4 +1,5 @@
 import { Layers } from 'lucide-react';
+import { Link } from 'react-router';
 
 export function Footer() {
   return (
@@ -22,7 +23,7 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-6">Navigation</h4>
             <div className="flex flex-col gap-4 text-sm text-gray-400">
-              <a href="#jobs" className="hover:text-white transition-colors">Jobs</a>
+              <Link to="/#jobs" className="hover:text-white transition-colors">Jobs</Link>
             </div>
           </div>
           

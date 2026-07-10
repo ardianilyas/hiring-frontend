@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate, Link } from 'react-router';
 import { ArrowLeft, MapPin, Briefcase, BadgeCheck, Bookmark, MoreHorizontal, Zap, Sparkles, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -46,7 +46,7 @@ export function JobDetailPage() {
         <Breadcrumb className="mb-8">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/#jobs" className="flex items-center gap-2">
+              <BreadcrumbLink render={<Link to="/#jobs" />} className="flex items-center gap-2">
                 <ArrowLeft className="w-3.5 h-3.5" />
                 Openings
               </BreadcrumbLink>

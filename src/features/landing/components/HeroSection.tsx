@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router';
 
 export function HeroSection() {
   return (
@@ -13,7 +14,7 @@ export function HeroSection() {
         
         <div className="flex flex-col sm:flex-row gap-6 mb-20 items-center animate-in slide-in-from-bottom-4 duration-700 delay-200 fade-in fill-mode-both">
           
-          <a href="#jobs" className="group">
+          <Link to="/#jobs" className="group">
             {/* 3-Layer Glassmorphism Border Container */}
             <div className="p-[2px] rounded-full bg-gradient-to-br from-slate-200 via-slate-100/50 to-white/40 backdrop-blur-xl shadow-md transition-all group-hover:shadow-lg group-hover:scale-105 duration-300">
               <div className="p-[2px] rounded-full bg-gradient-to-br from-white via-white/60 to-white/20 backdrop-blur-lg">
@@ -22,7 +23,7 @@ export function HeroSection() {
                 </Button>
               </div>
             </div>
-          </a>
+          </Link>
 
           <Button variant="outline" className="h-14 px-8 text-lg rounded-full border-brand-border text-brand-secondary hover:bg-brand-light font-medium transition-all">
             Post a Job

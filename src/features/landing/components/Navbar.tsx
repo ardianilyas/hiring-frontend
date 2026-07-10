@@ -50,12 +50,12 @@ export function Navbar() {
 
           {/* Center Navigation (Desktop Only) */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#jobs" className="text-sm font-medium text-brand-gray hover:text-brand-primary transition-colors">
+            <Link to="/#jobs" className="text-sm font-medium text-brand-gray hover:text-brand-primary transition-colors">
               Jobs
-            </a>
-            <a href="#contact" className="text-sm font-medium text-brand-gray hover:text-brand-primary transition-colors">
+            </Link>
+            <Link to="/#contact" className="text-sm font-medium text-brand-gray hover:text-brand-primary transition-colors">
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Right CTA */}

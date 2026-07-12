@@ -38,7 +38,7 @@ export interface SingleResponse<T> {
   data: T;
 }
 
-export const getJobOpenings = async (params?: { page?: number; limit?: number; search?: string; departmentId?: string; location?: string; employmentType?: string }): Promise<PaginatedResponse<JobOpening>> => {
+export const getJobOpenings = async (params?: { page?: number; limit?: number; search?: string; departmentId?: string; location?: string; employmentType?: string; isActive?: boolean }): Promise<PaginatedResponse<JobOpening>> => {
   const response = await apiClient.get('/job-openings', { params });
   return response.data;
 };

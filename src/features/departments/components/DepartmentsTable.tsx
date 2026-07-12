@@ -65,8 +65,9 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
       id: "index",
       header: "No.",
       cell: ({ row, table }) => {
-        const index = table.getSortedRowModel().rows.findIndex(r => r.id === row.id) + 1;
-        return <div className="text-muted-foreground w-8 text-center">{index}</div>;
+        const { pageIndex, pageSize } = table.getState().pagination;
+        const index = table.getSortedRowModel().rows.findIndex(r => r.id === row.id);
+        return <div className="text-muted-foreground w-8 text-center">{pageIndex * pageSize + index + 1}</div>;
       },
     },
     {

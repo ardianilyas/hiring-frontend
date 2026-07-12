@@ -36,7 +36,7 @@ export function ApplicationsPage() {
   return (
     <SidebarProvider>
       <AppSidebar user={user as any} />
-      <SidebarInset>
+      <SidebarInset className="overflow-hidden">
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 border-b border-brand-border bg-white">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1 mr-2" />
@@ -56,7 +56,7 @@ export function ApplicationsPage() {
           </div>
         </header>
         
-        <div className="flex flex-1 flex-col p-4 md:p-8 bg-slate-50 dark:bg-slate-950 min-h-[calc(100vh-4rem)]">
+        <div className="flex flex-1 flex-col p-4 md:p-8 bg-slate-50 dark:bg-slate-950 min-h-[calc(100vh-4rem)] min-w-0 w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-brand-secondary">Applications</h1>

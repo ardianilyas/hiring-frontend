@@ -240,9 +240,13 @@ export function DepartmentsTable({ data = [], isLoading }: DataTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-32 text-center text-muted-foreground">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <p>No departments found.</p>
+                <TableCell colSpan={columns.length} className="h-64 text-center">
+                  <div className="flex flex-col items-center justify-center text-muted-foreground gap-3">
+                    <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+                      <Search className="w-8 h-8 text-slate-300" />
+                    </div>
+                    <p className="text-lg font-medium text-slate-700">No departments found</p>
+                    <p className="text-sm">We couldn't find any departments matching your search.</p>
                   </div>
                 </TableCell>
               </TableRow>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MapPin, Clock, Briefcase } from 'lucide-react';
@@ -6,13 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { formatEnumString } from '@/lib/utils';
 import { useNavigate } from 'react-router';
 import { useJobOpenings } from '../hooks/useJobOpenings';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
 
 export function JobListingsSection() {
   const [page, setPage] = useState(1);
@@ -23,15 +17,20 @@ export function JobListingsSection() {
   const jobs = data?.data || [];
   const meta = data?.meta;
 
-  const handleNextPage = () => {
+  const [accumulatedJobs, setAccumulatedJobs] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (jobs && jobs.length > 0) {
+      setAccumulatedJobs(prev => {
+        const newJobs = jobs.filter((j: any) => !prev.some(p => p.id === j.id));
+        return [...prev, ...newJobs];
+      });
+    }
+  }, [jobs]);
+
+  const handleLoadMore = () => {
     if (meta?.nextUrl) {
       setPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (meta?.prevUrl) {
-      setPage((prev) => prev - 1);
     }
   };
 
@@ -70,15 +69,19 @@ export function JobListingsSection() {
           </div>
         )}
 
-        {!isLoading && !isError && jobs.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-brand-gray">No job openings found at the moment.</p>
+        {!isLoading && !isError && accumulatedJobs.length === 0 && (
+          <div className="text-center py-16 flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+              <Briefcase className="w-10 h-10 text-slate-300" />
+            </div>
+            <p className="text-xl font-bold text-brand-secondary mb-2">No open positions right now</p>
+            <p className="text-brand-gray">Check back later for new opportunities.</p>
           </div>
         )}
 
-        {!isLoading && !isError && jobs.length > 0 && (
+        {accumulatedJobs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {jobs.map((job: any, index: number) => (
+            {accumulatedJobs.map((job: any, index: number) => (
               <div 
                 key={job.id} 
                 className="group relative bg-white/50 backdrop-blur-xl p-7 rounded-[2rem] border border-brand-border/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 flex flex-col h-full animate-in slide-in-from-bottom-8 fade-in fill-mode-both view-in overflow-hidden"
@@ -120,24 +123,16 @@ export function JobListingsSection() {
           </div>
         )}
 
-        {meta && (meta.prevUrl || meta.nextUrl) && (
+        {meta?.nextUrl && (
           <div className="mt-12 flex justify-center">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious 
-                    onClick={handlePrevPage} 
-                    className={!meta?.prevUrl ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                  />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext 
-                    onClick={handleNextPage}
-                    className={!meta?.nextUrl ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+            <Button 
+              variant="outline" 
+              onClick={handleLoadMore} 
+              disabled={isLoading}
+              className="rounded-full px-8 border-brand-border hover:bg-slate-50"
+            >
+              {isLoading ? "Loading..." : "Load More"}
+            </Button>
           </div>
         )}
       </div>

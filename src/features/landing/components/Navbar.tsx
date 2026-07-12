@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Layers, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { Layers, LogOut, LayoutDashboard, ChevronDown, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '../../../shared/store/authStore';
 import { useLogout } from '../../auth/hooks/useAuth';
@@ -78,6 +78,10 @@ export function Navbar() {
                     </DropdownMenuLabel>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/my-applications')} className="cursor-pointer text-brand-secondary">
+                    <FileText className="mr-2 h-4 w-4 text-brand-gray" />
+                    <span>My Applications</span>
+                  </DropdownMenuItem>
                   {user?.role === 'admin' && (
                     <>
                       <DropdownMenuItem onClick={() => navigate('/dashboard')} className="cursor-pointer text-brand-secondary">

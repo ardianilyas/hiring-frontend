@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
-import { ArrowLeft, MapPin, Briefcase, BadgeCheck, Bookmark, MoreHorizontal, Zap, Sparkles, CircleDollarSign } from 'lucide-react';
+import { ArrowLeft, MapPin, Briefcase, BadgeCheck, Bookmark, MoreHorizontal, Zap, Sparkles, CircleDollarSign, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Breadcrumb,
@@ -10,11 +11,72 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useJobOpeningDetail } from '../hooks/useJobOpeningDetail';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSubmitApplication, useMyApplications } from '../../applications/hooks/useApplications';
+import { useAuthStore } from '@/shared/store/authStore';
+
+const applicationSchema = z.object({
+  resume: z.string().url('Please enter a valid URL to your resume (e.g. LinkedIn, Google Drive, Personal Site)'),
+  coverLetter: z.string().optional(),
+});
+type ApplicationFormValues = z.infer<typeof applicationSchema>;
 
 export function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, isError } = useJobOpeningDetail(id || null);
+  const [open, setOpen] = useState(false);
+  const submitApplication = useSubmitApplication();
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const { data: myAppsData, isLoading: isLoadingApps } = useMyApplications(undefined, isAuthenticated);
+  const hasApplied = myAppsData?.data?.some(app => app.jobOpeningId === id);
+
+  const form = useForm<ApplicationFormValues>({
+    resolver: zodResolver(applicationSchema),
+    defaultValues: {
+      resume: '',
+      coverLetter: '',
+    }
+  });
+
+  const onSubmit = (values: ApplicationFormValues) => {
+    if (!id) return;
+    submitApplication.mutate(
+      { jobOpeningId: id, ...values },
+      {
+        onSuccess: () => {
+          setOpen(false);
+          form.reset();
+        },
+        onError: (error: any) => {
+          if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
+            error.response.data.errors.forEach((err: any) => {
+              if (err.field) {
+                form.setError(err.field as any, {
+                  type: 'server',
+                  message: err.message,
+                });
+              }
+            });
+          }
+        }
+      }
+    );
+  };
 
   if (isLoading) {
     return (
@@ -105,10 +167,63 @@ export function JobDetailPage() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-4 mb-10">
-          <Button className="bg-[#2D68F0] hover:bg-[#2557c9] text-white rounded-full px-6 py-5 text-base font-medium flex items-center gap-2">
-            <Zap className="w-4 h-4 fill-white" />
-            Easy apply
-          </Button>
+          <Dialog open={open} onOpenChange={(newOpen) => {
+            if (hasApplied) return;
+            if (newOpen && !isAuthenticated) {
+              navigate('/sign-in');
+              return;
+            }
+            setOpen(newOpen);
+          }}>
+            <DialogTrigger render={<Button disabled={hasApplied || isLoadingApps} className="bg-[#2D68F0] hover:bg-[#2557c9] text-white rounded-full px-6 py-5 text-base font-medium flex items-center gap-2 disabled:bg-gray-300 disabled:text-gray-500" />}>
+              <Zap className={`w-4 h-4 ${hasApplied ? 'fill-gray-500' : 'fill-white'}`} />
+              {hasApplied ? 'Applied' : 'Easy apply'}
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Apply for {job.title}</DialogTitle>
+                <DialogDescription>
+                  Submit your resume link and an optional cover letter below. Our hiring team will review your application shortly.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="resume">Resume Link <span className="text-red-500">*</span></Label>
+                  <Input 
+                    id="resume"
+                    placeholder="https://linkedin.com/in/..." 
+                    {...form.register('resume')} 
+                  />
+                  {form.formState.errors.resume && (
+                    <p className="text-sm text-red-500">{form.formState.errors.resume.message}</p>
+                  )}
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="coverLetter">Cover Letter (Optional)</Label>
+                  <Textarea 
+                    id="coverLetter"
+                    placeholder="Why are you a great fit for this role?" 
+                    className="min-h-[120px]"
+                    {...form.register('coverLetter')} 
+                  />
+                  {form.formState.errors.coverLetter && (
+                    <p className="text-sm text-red-500">{form.formState.errors.coverLetter.message}</p>
+                  )}
+                </div>
+                
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={submitApplication.isPending}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="bg-[#2D68F0] hover:bg-[#2557c9] text-white" disabled={submitApplication.isPending}>
+                    {submitApplication.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : 'Submit Application'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+
           <Button variant="outline" className="rounded-full px-6 py-5 text-base font-medium flex items-center gap-2 border-gray-200">
             <Sparkles className="w-4 h-4 text-blue-500" />
             Create resume

@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
-import { Copy, MoreHorizontal, Pencil, Trash, Search } from "lucide-react";
+import { Briefcase, Copy, MoreHorizontal, Pencil, Search, Trash } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -271,9 +271,13 @@ export function JobOpeningsTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-32 text-center text-muted-foreground">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <p>No job openings found.</p>
+                <TableCell colSpan={columns.length} className="h-64 text-center">
+                  <div className="flex flex-col items-center justify-center text-muted-foreground gap-3">
+                    <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-2">
+                      <Briefcase className="w-8 h-8 text-slate-300" />
+                    </div>
+                    <p className="text-lg font-medium text-slate-700">No job openings found</p>
+                    <p className="text-sm">Get started by creating a new job opening.</p>
                   </div>
                 </TableCell>
               </TableRow>

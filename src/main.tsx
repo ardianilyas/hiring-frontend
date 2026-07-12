@@ -12,6 +12,8 @@ import { LandingPage, JobDetailPage } from './features/landing'
 import { DashboardPage } from './features/dashboard'
 import { DepartmentsPage } from './features/departments'
 import { JobOpeningsPage } from './features/job-openings'
+import { ApplicationsPage } from './features/applications/pages/ApplicationsPage'
+import { MyApplicationsPage } from './features/applications/pages/MyApplicationsPage'
 import { ProtectedRoute } from './shared/components/ProtectedRoute'
 import { PublicRoute } from './shared/components/PublicRoute'
 import { NotFoundPage } from './shared/pages/NotFoundPage'
@@ -29,8 +31,10 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/dashboard" element={<ProtectedRoute requireAdmin={true}><DashboardPage /></ProtectedRoute>} />
               <Route path="/dashboard/departments" element={<ProtectedRoute requireAdmin={true}><DepartmentsPage /></ProtectedRoute>} />
               <Route path="/dashboard/jobs" element={<ProtectedRoute requireAdmin={true}><JobOpeningsPage /></ProtectedRoute>} />
+              <Route path="/dashboard/applications" element={<ProtectedRoute requireAdmin={true}><ApplicationsPage /></ProtectedRoute>} />
               <Route path="/sign-in" element={<PublicRoute><SignInPage /></PublicRoute>} />
               <Route path="/sign-up" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+              <Route path="/my-applications" element={<ProtectedRoute><MyApplicationsPage /></ProtectedRoute>} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </BrowserRouter>

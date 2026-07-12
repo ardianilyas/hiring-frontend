@@ -15,7 +15,13 @@ export const useDeleteJobOpening = (onSuccessCallback?: () => void) => {
       }
     },
     onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to delete job opening';
+      let message = error.response?.data?.message || 'Failed to delete job opening';
+      
+      // Friendly message for backend foreign key constraint errors
+      if (message.toLowerCase().includes("related record") || message.toLowerCase().includes("foreign key")) {
+        message = "Cannot delete this job because it has active applications. Please edit and set it to Inactive instead.";
+      }
+      
       toast.error(message);
     },
   });
